@@ -1,0 +1,13 @@
+{
+  "name": "techshan-home",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.20.0",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": {
+    "dev": "corepack pnpm --parallel --filter @techshan/web --filter @techshan/server dev",
+    "build": "corepack pnpm -r build",
+    "check": "corepack pnpm -r check",
+    "test": "corepack pnpm -r test"
+  }
+}

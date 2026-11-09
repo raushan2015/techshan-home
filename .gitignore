@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+.svelte-kit/
+data/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+.DS_Store
