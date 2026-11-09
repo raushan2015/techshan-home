@@ -33,7 +33,18 @@ button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset:
 .icon-button:disabled, .photo-nav:disabled, .text-button:disabled, .integration-row:disabled { cursor: default; }
 .icon-button:disabled:hover { background: rgba(255,255,255,.16); transform: none; }
 .notification-button i { position: absolute; top: 7px; right: 7px; width: 8px; height: 8px; border-radius: 50%; background: #f57c77; box-shadow: 0 0 0 2px rgba(248, 195, 177, .45); }
-.connection-pill { gap: 8px; height: 40px; padding: 0 13px; border-radius: 24px; color: rgba(255,255,255,.88); font-size: 12px; }
+.connection-wrap { position: relative; }
+.connection-pill { gap: 8px; height: 40px; padding: 0 13px; border-radius: 24px; color: rgba(255,255,255,.88); font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: background .2s; }
+.connection-pill:hover { background: rgba(255,255,255,.28); }
+.connection-pill.offline { border-color: rgba(245, 124, 119, .55); color: #ffd9d7; }
+.connection-popover { position: absolute; top: calc(100% + 10px); right: 0; z-index: 40; width: 252px; padding: 14px 16px 12px; border-radius: 18px; }
+.connection-popover strong { display: block; margin-bottom: 10px; font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+.connection-popover ul { display: grid; gap: 8px; margin: 0 0 10px; padding: 0; list-style: none; }
+.connection-popover li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 12px; }
+.connection-popover li span { color: rgba(255,255,255,.65); }
+.connection-popover li b { font-weight: 600; text-align: right; }
+.connection-refresh { display: inline-flex; align-items: center; border: 0; padding: 4px 0; background: transparent; color: rgba(255,255,255,.85); font-family: inherit; font-size: 11px; font-weight: 600; cursor: pointer; }
+.connection-refresh:hover { color: #fff; text-decoration: underline; }
 
 .dashboard-grid { width: min(100% - 64px, 1720px); min-height: calc(100svh - 106px); margin: 0 auto 24px; display: grid; grid-template-columns: minmax(355px, 35%) minmax(0, 1fr); grid-template-rows: minmax(535px, 1fr) auto; column-gap: clamp(22px, 3vw, 52px); row-gap: 18px; }
 .left-rail { z-index: 1; display: flex; flex-direction: column; gap: 18px; align-self: stretch; }
@@ -144,7 +155,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset:
   .topbar, .dashboard-grid { width: calc(100% - 28px); }
   .topbar { height: 68px; }
   .top-actions { gap: 8px; }
-  .top-actions .notification-button, .top-actions .connection-pill { display: none; }
+  .top-actions .notification-button, .top-actions .connection-wrap { display: none; }
   .icon-button { width: 44px; height: 44px; }
   .brand { gap: 9px; font-size: 14px; }
   .brand-mark { width: 40px; height: 40px; border-radius: 13px; }

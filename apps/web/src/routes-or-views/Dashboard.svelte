@@ -1,11 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Bell, Settings, Wifi, ChevronLeft, ChevronRight, Images } from '@lucide/svelte';
+  import { Bell, Settings, Wifi, WifiOff, ChevronLeft, ChevronRight, Images } from '@lucide/svelte';
   import ClockCard from '../components/ClockCard.svelte';
   import WeatherCard from '../components/WeatherCard.svelte';
   import EventsCard from '../components/EventsCard.svelte';
   import SettingsPanel from '../components/SettingsPanel.svelte';
+  import { connection } from '../stores/connection.svelte';
   import { loadCalendarEvents, loadDashboardStatus, loadSlideshowPhotos, loadWeatherSnapshot, type CalendarEventsSnapshot, type DashboardStatus, type SlideshowPhoto, type WeatherSnapshot } from '../services/dashboard';
+
+  const effectiveTypeLabels: Record<string, string> = { 'slow-2g': 'Slow 2G', '2g': '2G', '3g': '3G', '4g': '4G class' };
 
   let { settingsOpen = $bindable(false) }: { settingsOpen: boolean } = $props();
   let status = $state<DashboardStatus>({ weather: 'not-configured', calendar: 'not-configured', photos: 'not-configured' });
@@ -17,6 +20,32 @@
   let photos = $state<SlideshowPhoto[]>([]);
   let photoIndex = $state(0);
   let currentPhoto = $derived(photos[photoIndex]);
+  let connectionInfoOpen = $state(false);
+
+  const connectionHealthy = $derived(connection.online && connection.serverReachable !== false);
+  const connectionLabel = $derived(!connection.online ? 'Offline' : connection.serverReachable === false ? 'Unreachable' : 'Local');
+
+  onMount(() => {
+    connection.start();
+    return () => connection.stop();
+  });
+
+  // Close the connection popover on Escape or clicks outside of it.
+  $effect(() => {
+    if (!connectionInfoOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') connectionInfoOpen = false;
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.target instanceof Element && !event.target.closest('.connection-wrap')) connectionInfoOpen = false;
+    };
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('pointerdown', onPointerDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('pointerdown', onPointerDown);
+    };
+  });
 
   onMount(() => {
     const refreshPhotos = async () => {
@@ -64,7 +93,33 @@
     <a class="brand" href="/" aria-label="TECHSHAN-HOME dashboard"><span class="brand-mark"><img src="/logo.png" alt="" /></span><span>TECHSHAN-HOME</span></a>
     <div class="top-actions">
       <button class="icon-button notification-button" aria-label="Notifications" disabled title="Notifications are not available yet"><Bell size={19} /><i></i></button>
-      <span class="connection-pill" title="Connected to this dashboard"><Wifi size={18} /><span>Local</span></span>
+      <div class="connection-wrap">
+        <button
+          class="connection-pill"
+          class:offline={!connectionHealthy}
+          onclick={() => (connectionInfoOpen = !connectionInfoOpen)}
+          aria-expanded={connectionInfoOpen}
+          aria-haspopup="dialog"
+          title="Connection status"
+        >
+          {#if connectionHealthy}<Wifi size={18} />{:else}<WifiOff size={18} />{/if}
+          <span>{connectionLabel}</span>
+        </button>
+        {#if connectionInfoOpen}
+          <div class="connection-popover glass-card" role="dialog" aria-label="Connection details">
+            <strong>Connection</strong>
+            <ul>
+              <li><span>Device network</span><b>{connection.online ? 'Connected' : 'Offline'}</b></li>
+              <li><span>Dashboard server</span><b>{connection.serverReachable === null ? 'Checking…' : connection.serverReachable ? 'Reachable' : 'Unreachable'}</b></li>
+              <li><span>Connection class</span><b>{connection.effectiveType ? effectiveTypeLabels[connection.effectiveType] : 'Not reported'}</b></li>
+              <li><span>Downlink estimate</span><b>{connection.downlink !== null ? `${connection.downlink} Mbps` : 'Not reported'}</b></li>
+              <li><span>Latency estimate</span><b>{connection.rtt !== null ? `${connection.rtt} ms` : 'Not reported'}</b></li>
+              {#if connection.networkInfoAvailable}<li><span>Data saver</span><b>{connection.saveData ? 'On' : 'Off'}</b></li>{/if}
+            </ul>
+            <button class="connection-refresh" onclick={() => connection.probeServer()}>Check again</button>
+          </div>
+        {/if}
+      </div>
       <button class="icon-button" onclick={() => (settingsOpen = true)} aria-label="Open settings"><Settings size={20} /></button>
     </div>
   </header>
