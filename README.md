@@ -2,6 +2,28 @@
 
 A self-hosted responsive home dashboard built with Svelte, Vite, Fastify, and shared Zod contracts.
 
+## Screenshots
+
+Captured from the running container image.
+
+![Dashboard overview](docs/screenshots/dashboard.jpg)
+
+*Desktop dashboard: live clock, JMA + Open-Meteo weather, calendar panel, and the photo stage.*
+
+![Connection details popover](docs/screenshots/connection-popover.jpg)
+
+*The top-bar connection indicator reads live device network state: browser connectivity, Network Information API estimates, and a dashboard-server health probe.*
+
+![Settings drawer](docs/screenshots/settings.jpg)
+
+*Settings drawer for shared weather, Google Calendar, and Immich.*
+
+<p>
+  <img src="docs/screenshots/mobile.jpg" alt="TECHSHAN-HOME on a phone" width="320" />
+</p>
+
+*The same dashboard on a phone.*
+
 ## Current implementation
 
 The dashboard follows the photo-first reference with a live local clock, responsive weather and calendar panels, an Immich photo stage, and a Settings drawer. Weather uses Open-Meteo forecasts globally. For Japan, current temperature, humidity, and recent rainfall come from the nearest Japan Meteorological Agency (JMA) observation station, and rain outlook comes from the JMA local forecast. Google Calendar supports read-only OAuth, calendar selection, and a shared event cache. Immich supports server URL and API-key setup in Settings, encrypted key storage, album selection, and a same-origin thumbnail slideshow. The server refreshes weather and Immich photo metadata every 10 minutes and calendar events every 5 minutes. Device location uses BigDataCloud in the browser to label the forecast with a city name.
