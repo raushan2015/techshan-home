@@ -16,7 +16,7 @@ Captured from the running container image.
 
 ![Settings drawer](docs/screenshots/settings.jpg)
 
-*Settings drawer for shared weather, Google Calendar, and Immich.*
+*Settings drawer for shared weather, Google Calendar, Immich, and **brand name/logo**.*
 
 <p>
   <img src="docs/screenshots/mobile.jpg" alt="TECHSHAN-HOME on a phone" width="320" />
@@ -26,7 +26,7 @@ Captured from the running container image.
 
 ## Current implementation
 
-The dashboard follows the photo-first reference with a live local clock, responsive weather and calendar panels, an Immich photo stage, and a Settings drawer. Weather uses Open-Meteo forecasts globally. For Japan, current temperature, humidity, and recent rainfall come from the nearest Japan Meteorological Agency (JMA) observation station, and rain outlook comes from the JMA local forecast. Google Calendar supports read-only OAuth, calendar selection, and a shared event cache. Immich supports server URL and API-key setup in Settings, encrypted key storage, album selection, and a same-origin thumbnail slideshow. The server refreshes weather and Immich photo metadata every 10 minutes and calendar events every 5 minutes. Device location uses BigDataCloud in the browser to label the forecast with a city name.
+The dashboard follows the photo-first reference with a live local clock, responsive weather and calendar panels, an Immich photo stage, and a Settings drawer. Weather uses Open-Meteo forecasts globally. For Japan, current temperature, humidity, and recent rainfall come from the nearest Japan Meteorological Agency (JMA) observation station, and rain outlook comes from the JMA local forecast. Google Calendar supports read-only OAuth, calendar selection, and a shared event cache. Immich supports server URL and API-key setup in Settings, encrypted key storage, album selection, and a same-origin thumbnail slideshow. **Branding settings let you set a custom dashboard name and upload a logo (PNG/JPEG/WebP, up to 2 MB) shared across every screen.** The server refreshes weather and Immich photo metadata every 10 minutes and calendar events every 5 minutes. Device location uses BigDataCloud in the browser to label the forecast with a city name.
 
 Swagger UI is available at `/api/docs/` when the API server is running. It publishes the generated OpenAPI document at `/api/docs/json` and `/api/docs/yaml`.
 
