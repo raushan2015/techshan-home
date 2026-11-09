@@ -14,6 +14,7 @@ import { startWeatherRefreshLoop, stopWeatherRefreshLoop } from './modules/weath
 import { startCalendarRefreshLoop, stopCalendarRefreshLoop } from './modules/calendar/service.js';
 import { registerImmichRoutes } from './modules/immich/routes.js';
 import { startImmichRefreshLoop, stopImmichRefreshLoop } from './modules/immich/service.js';
+import { registerBrandingRoutes } from './modules/branding/routes.js';
 
 const server = Fastify({ logger: true, trustProxy: false });
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -33,6 +34,7 @@ await server.register(swagger, {
       { name: 'Weather', description: 'Open-Meteo forecasts, JMA observations in Japan, and shared weather settings.' },
       { name: 'Google Calendar', description: 'OAuth connection, selected calendars, and shared read-only events.' },
       { name: 'Immich Photos', description: 'Immich server connection, selected albums, and authorized slideshow photos.' },
+      { name: 'Branding', description: 'Shared brand name and logo for every dashboard screen.' },
     ],
   },
 });
@@ -71,6 +73,7 @@ await registerDashboardRoutes(server);
 await registerWeatherRoutes(server);
 await registerGoogleCalendarRoutes(server);
 await registerImmichRoutes(server);
+await registerBrandingRoutes(server);
 server.addHook('onClose', async () => {
   stopWeatherRefreshLoop();
   stopCalendarRefreshLoop();

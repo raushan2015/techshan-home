@@ -6,7 +6,7 @@
   import EventsCard from '../components/EventsCard.svelte';
   import SettingsPanel from '../components/SettingsPanel.svelte';
   import { connection } from '../stores/connection.svelte';
-  import { loadCalendarEvents, loadDashboardStatus, loadSlideshowPhotos, loadWeatherSnapshot, type CalendarEventsSnapshot, type DashboardStatus, type SlideshowPhoto, type WeatherSnapshot } from '../services/dashboard';
+  import { loadBranding, loadCalendarEvents, loadDashboardStatus, loadSlideshowPhotos, loadWeatherSnapshot, type BrandingConfig, type CalendarEventsSnapshot, type DashboardStatus, type SlideshowPhoto, type WeatherSnapshot } from '../services/dashboard';
 
   const effectiveTypeLabels: Record<string, string> = { 'slow-2g': 'Slow 2G', '2g': '2G', '3g': '3G', '4g': '4G class' };
 
@@ -21,6 +21,10 @@
   let photoIndex = $state(0);
   let currentPhoto = $derived(photos[photoIndex]);
   let connectionInfoOpen = $state(false);
+  let branding = $state<BrandingConfig>({ name: null, customLogo: false, logoUpdatedAt: null });
+
+  const brandName = $derived(branding.name ?? 'TECHSHAN-HOME');
+  const brandLogoSrc = $derived(branding.customLogo && branding.logoUpdatedAt ? `/api/v1/settings/branding/logo?v=${encodeURIComponent(branding.logoUpdatedAt)}` : '/logo-mark.png');
 
   const connectionHealthy = $derived(connection.online && connection.serverReachable !== false);
   const connectionLabel = $derived(!connection.online ? 'Offline' : connection.serverReachable === false ? 'Unreachable' : 'Local');
@@ -70,10 +74,16 @@
       window.history.replaceState({}, '', window.location.pathname);
     }
     void refresh();
+    void loadBranding().then((next) => (branding = next));
     window.addEventListener('immich-updated', refreshPhotos);
+    window.addEventListener('branding-updated', refreshBranding);
     const timer = window.setInterval(() => { void refresh(); }, 5 * 60 * 1000);
-    return () => { window.clearInterval(timer); window.removeEventListener('immich-updated', refreshPhotos); };
+    return () => { window.clearInterval(timer); window.removeEventListener('immich-updated', refreshPhotos); window.removeEventListener('branding-updated', refreshBranding); };
   });
+
+  async function refreshBranding() {
+    branding = await loadBranding();
+  }
 
   function movePhoto(direction: number) {
     if (photos.length < 2) return;
@@ -90,7 +100,7 @@
 <main class="dashboard-shell">
   <div class="backdrop"></div>
   <header class="topbar">
-    <a class="brand" href="/" aria-label="TECHSHAN-HOME dashboard"><span class="brand-mark"><img src="/logo.png" alt="" /></span><span>TECHSHAN-HOME</span></a>
+    <a class="brand" href="/" aria-label={`${brandName} dashboard`}><span class="brand-mark"><img src={brandLogoSrc} alt="" /></span><span>{brandName}</span></a>
     <div class="top-actions">
       <button class="icon-button notification-button" aria-label="Notifications" disabled title="Notifications are not available yet"><Bell size={19} /><i></i></button>
       <div class="connection-wrap">

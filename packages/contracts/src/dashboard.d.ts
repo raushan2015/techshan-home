@@ -81,3 +81,10 @@ export declare const googleCalendarItemSchema: z.ZodType<GoogleCalendarItem>;
 export declare const googleCalendarStatusSchema: z.ZodType<GoogleCalendarStatus>;
 export declare const calendarEventSchema: z.ZodType<CalendarEvent>;
 export declare const calendarEventsSnapshotSchema: z.ZodType<CalendarEventsSnapshot>;
+
+export type BrandingConfig = {
+  name: string | null;
+  customLogo: boolean;
+  logoUpdatedAt: string | null;
+};
+export declare const brandingConfigSchema: z.ZodType<BrandingConfig>;

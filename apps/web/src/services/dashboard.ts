@@ -1,4 +1,5 @@
 import type {
+  BrandingConfig,
   CalendarEvent,
   CalendarEventsSnapshot,
   DashboardStatus,
@@ -8,7 +9,7 @@ import type {
   WeatherSnapshot,
 } from '@techshan/contracts/dashboard';
 
-export type { CalendarEvent, CalendarEventsSnapshot, DashboardStatus, GoogleCalendarStatus, WeatherLocation, WeatherSettings, WeatherSnapshot };
+export type { BrandingConfig, CalendarEvent, CalendarEventsSnapshot, DashboardStatus, GoogleCalendarStatus, WeatherLocation, WeatherSettings, WeatherSnapshot };
 export type IntegrationState = DashboardStatus[keyof DashboardStatus];
 export type ImmichAlbum = { id: string; name: string; assetCount: number; selected: boolean };
 export type ImmichStatus = { configured: boolean; connected: boolean; serverUrl: string; apiKeyHint: string | null; albums: ImmichAlbum[]; selectedAlbumIds: string[]; photoCount: number; refreshedAt: string | null; lastError: string | null };
@@ -148,4 +149,47 @@ export async function refreshCalendarEvents(): Promise<CalendarEventsSnapshot> {
   });
   if (!response.ok) throw new Error('Could not refresh Google Calendar.');
   return (await response.json()) as CalendarEventsSnapshot;
+}
+
+const defaultBranding: BrandingConfig = { name: null, customLogo: false, logoUpdatedAt: null };
+
+export async function loadBranding(): Promise<BrandingConfig> {
+  try {
+    const response = await fetch('/api/v1/settings/branding', { credentials: 'same-origin' });
+    if (!response.ok) return defaultBranding;
+    return (await response.json()) as BrandingConfig;
+  } catch {
+    return defaultBranding;
+  }
+}
+
+export async function saveBrandingName(name: string | null): Promise<BrandingConfig> {
+  const response = await fetch('/api/v1/settings/branding', {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ name }),
+  });
+  const result = await response.json() as BrandingConfig | { error?: string };
+  if (!response.ok) throw new Error('error' in result ? result.error || 'Could not save the brand name.' : 'Could not save the brand name.');
+  return result as BrandingConfig;
+}
+
+export async function uploadBrandingLogo(file: File): Promise<BrandingConfig> {
+  const response = await fetch('/api/v1/settings/branding/logo', {
+    method: 'PUT',
+    credentials: 'same-origin',
+    headers: { 'content-type': 'application/octet-stream' },
+    body: file,
+  });
+  const result = await response.json() as BrandingConfig | { error?: string };
+  if (!response.ok) throw new Error('error' in result ? result.error || 'Could not use this image as the logo.' : 'Could not use this image as the logo.');
+  return result as BrandingConfig;
+}
+
+export async function removeBrandingLogo(): Promise<BrandingConfig> {
+  const response = await fetch('/api/v1/settings/branding/logo', { method: 'DELETE', credentials: 'same-origin' });
+  const result = await response.json() as BrandingConfig | { error?: string };
+  if (!response.ok) throw new Error('error' in result ? result.error || 'Could not remove the custom logo.' : 'Could not remove the custom logo.');
+  return result as BrandingConfig;
 }

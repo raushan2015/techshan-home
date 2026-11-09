@@ -78,3 +78,9 @@ export const calendarEventsSnapshotSchema = z.object({
   events: z.array(calendarEventSchema),
   lastSyncedAt: z.string().nullable(),
 });
+
+export const brandingConfigSchema = z.object({
+  name: z.string().min(1).max(40).nullable(),
+  customLogo: z.boolean(),
+  logoUpdatedAt: z.string().nullable(),
+});
