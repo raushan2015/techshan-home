@@ -59,8 +59,10 @@ await server.register(helmet, {
       frameAncestors: ["'none'"],
       formAction: ["'self'"],
       baseUri: ["'self'"],
+      upgradeInsecureRequests: null,
     },
   },
+  hsts: false,
 });
 // Headroom for several dashboard screens polling the shared cache and
 // streaming slideshow thumbnails at the same time.
