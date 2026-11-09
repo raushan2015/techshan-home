@@ -8,6 +8,7 @@
     "dev": "corepack pnpm --parallel --filter @techshan/web --filter @techshan/server dev",
     "build": "corepack pnpm -r build",
     "check": "corepack pnpm -r check",
-    "test": "corepack pnpm -r test"
+    "test": "corepack pnpm -r test",
+    "ci": "node scripts/ci.mjs"
   }
 }

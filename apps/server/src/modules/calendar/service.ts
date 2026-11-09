@@ -293,7 +293,9 @@ export async function refreshGoogleCalendar(): Promise<CalendarEventsSnapshot> {
   syncInProgress = (async () => {
     if (!(await isConfigured())) {
       eventSnapshot = { state: 'not-configured', events: [], lastSyncedAt: null };
-      calendarStatus = { ...calendarStatus, configured: false, connected: false, calendars: [], lastError: null };
+      // Preserve any existing lastError (for example an undecryptable config
+      // file) so the status keeps explaining the broken storage.
+      calendarStatus = { ...calendarStatus, configured: false, connected: false, calendars: [] };
       return eventSnapshot;
     }
     const auth = await getAuthorizedClient();

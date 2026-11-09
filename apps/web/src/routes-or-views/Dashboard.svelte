@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Bell, House, Settings, Wifi, ChevronLeft, ChevronRight, Images } from '@lucide/svelte';
+  import { Bell, Settings, Wifi, ChevronLeft, ChevronRight, Images } from '@lucide/svelte';
   import ClockCard from '../components/ClockCard.svelte';
   import WeatherCard from '../components/WeatherCard.svelte';
   import EventsCard from '../components/EventsCard.svelte';
@@ -61,7 +61,7 @@
 <main class="dashboard-shell">
   <div class="backdrop"></div>
   <header class="topbar">
-    <a class="brand" href="/" aria-label="TECHSHAN-HOME dashboard"><span class="brand-mark"><House size={21} fill="currentColor" strokeWidth={1.5} /></span><span>TECHSHAN-HOME</span></a>
+    <a class="brand" href="/" aria-label="TECHSHAN-HOME dashboard"><span class="brand-mark"><img src="/logo.png" alt="" /></span><span>TECHSHAN-HOME</span></a>
     <div class="top-actions">
       <button class="icon-button notification-button" aria-label="Notifications" disabled title="Notifications are not available yet"><Bell size={19} /><i></i></button>
       <span class="connection-pill" title="Connected to this dashboard"><Wifi size={18} /><span>Local</span></span>

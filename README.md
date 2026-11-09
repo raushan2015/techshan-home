@@ -27,6 +27,13 @@ corepack pnpm test
 corepack pnpm build
 ```
 
+Run the whole CI pipeline locally (install, type check, tests, build, and the
+container image build when Docker is installed):
+
+```sh
+corepack pnpm run ci
+```
+
 The Vite UI runs at `http://127.0.0.1:5173` and proxies `/api` requests to Fastify at `http://127.0.0.1:3000`.
 
 ### Google Calendar local setup

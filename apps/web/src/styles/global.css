@@ -26,6 +26,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset:
 .brand { display: inline-flex; align-items: center; gap: 15px; color: #fff; text-decoration: none; font: 800 20px/1 'Manrope', sans-serif; letter-spacing: .035em; text-shadow: var(--text-shadow); }
 .brand-mark, .icon-button, .connection-pill { display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.16); box-shadow: 0 8px 28px rgba(34, 24, 33, .08); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 .brand-mark { width: 44px; height: 44px; border-radius: 15px; }
+.brand-mark img { display: block; width: 26px; height: 26px; object-fit: contain; }
 .top-actions { display: flex; align-items: center; gap: 13px; }
 .icon-button { position: relative; width: 44px; height: 44px; padding: 0; border-radius: 50%; cursor: pointer; transition: background .2s, transform .2s; }
 .icon-button:hover { background: rgba(255,255,255,.28); transform: translateY(-1px); }
